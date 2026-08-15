@@ -156,22 +156,38 @@ function renderHome() {
   // Streak
   $('streak-number').textContent = calcStreak();
 
-  // Today status
+  // Anchor card — the core entry point
   const todayData = state.eveningData[today];
   const checkedIn = state.checkins[today];
-  const statusEl = $('today-status');
+  const anchorCard = $('anchor-card');
+  const anchorIcon = $('anchor-icon');
+  const anchorTitle = $('anchor-title');
+  const anchorSub = $('anchor-subtitle');
+  const anchorBtn = $('anchor-btn');
+
   if (checkedIn) {
-    statusEl.className = 'done';
-    statusEl.innerHTML = '✓ 今日已完成晨间锚定';
-    statusEl.onclick = null;
+    anchorCard.className = 'anchor-card done';
+    anchorIcon.innerHTML = '&#x2714;&#xfe0f;';
+    anchorTitle.textContent = '今日已锚定';
+    anchorSub.textContent = '你已经完成了今天的晨间锚定';
+    anchorBtn.style.display = 'none';
+    anchorCard.onclick = null;
   } else if (todayData && todayData.actions && todayData.actions.length > 0) {
-    statusEl.className = '';
-    statusEl.innerHTML = '🌅 有今日目标待查看';
-    statusEl.onclick = () => startMorning();
+    anchorCard.className = 'anchor-card';
+    anchorIcon.innerHTML = '&#x1f304;';
+    anchorTitle.textContent = '有今日目标待查看';
+    anchorSub.textContent = '你写下了今天的计划和Prompt，点击进入晨间锚定';
+    anchorBtn.style.display = 'block';
+    anchorBtn.textContent = '开始晨间锚定';
+    anchorCard.onclick = () => startMorning();
+    anchorBtn.onclick = (e) => { e.stopPropagation(); startMorning(); };
   } else {
-    statusEl.className = '';
-    statusEl.innerHTML = '✏️ 还没有今日目标，马上写一个';
-    statusEl.onclick = () => goEvening();
+    anchorCard.className = 'anchor-card waiting';
+    anchorIcon.innerHTML = '&#x1f31b;';
+    anchorTitle.textContent = '还没有今日目标';
+    anchorSub.textContent = '点击下方"写今日目标"，开始新的一天';
+    anchorBtn.style.display = 'none';
+    anchorCard.onclick = null;
   }
 
   // Goals preview
@@ -220,6 +236,7 @@ function renderHome() {
   const writeFor = targetDate();
   const btnLabel = writeFor === today ? '写今日目标' : '写明日目标';
   $('evening-write-btn').textContent = btnLabel;
+  $('evening-write-btn').className = writeFor === today ? 'btn btn-primary btn-large btn-full' : 'btn btn-outline btn-full';
   $('evening-write-btn').onclick = goEvening;
 }
 function calcStreak() {
