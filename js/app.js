@@ -507,7 +507,19 @@ function initSettings() {
 function boot() {
   loadState();
 
-  if (!state.onboarded) {
+  // Check if user has any meaningful data — if so, they're not a new user
+  const hasData = state.goals.length > 0 ||
+    Object.keys(state.checkins).length > 0 ||
+    Object.keys(state.eveningData).length > 0;
+
+  if (hasData) {
+    // User has data, skip onboarding regardless of flag
+    if (!state.onboarded) {
+      state.onboarded = true;
+      saveState();
+    }
+  } else if (!state.onboarded) {
+    // No data and no flag — genuinely new user
     showPage('onboarding');
     initOnboarding();
     return;
