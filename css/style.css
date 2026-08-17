@@ -116,7 +116,7 @@ h3 { font-size: 1rem; font-weight: 600; color: #666; margin-bottom: 0.5rem; }
 .anchor-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
 .anchor-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.3rem; }
 .anchor-subtitle { font-size: 0.95rem; opacity: 0.85; line-height: 1.5; }
-.anchor-btn { margin-top: 1rem; background: rgba(255,255,255,0.2); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); }
+.anchor-btn { margin: 1rem auto 0; background: rgba(255,255,255,0.2); color: #fff; border: 1.5px solid rgba(255,255,255,0.4); display: inline-block; }
 .anchor-btn:active { background: rgba(255,255,255,0.3); }
 .streak-card {
   background: linear-gradient(135deg, #FFF5E6, #FFE8CC);

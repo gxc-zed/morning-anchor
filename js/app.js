@@ -43,7 +43,8 @@ let state = {
   checkins: {},      // keyed by date: true/false
   todos: {},         // keyed by date: [{text, done}, ...]
   settings: { autoplay: true, slideDuration: 6 },
-  onboarded: false
+  onboarded: false,
+  greetingShown: false
 };
 
 /* ===== DOM REFS ===== */
@@ -63,6 +64,7 @@ function loadState() {
   state.todos = Store.get('todos', {});
   state.settings = Store.get('settings', { autoplay: true, slideDuration: 6 });
   state.onboarded = Store.get('onboarded', false);
+  state.greetingShown = Store.get('greetingShown', false);
 }
 function saveState() {
   Store.set('goals', state.goals);
@@ -70,6 +72,7 @@ function saveState() {
   Store.set('checkins', state.checkins);
   Store.set('todos', state.todos);
   Store.set('settings', state.settings);
+  Store.set('greetingShown', state.greetingShown);
 }
 
 /* ===== ONBOARDING ===== */
@@ -151,7 +154,15 @@ function goHome() {
 }
 function renderHome() {
   const today = todayKey();
-  $('greeting').textContent = greeting() + ' 👋';
+
+  // Greeting — only show on first visit after onboarding
+  if (!state.greetingShown) {
+    $('greeting').textContent = greeting() + ' 👋';
+    state.greetingShown = true;
+    saveState();
+  } else {
+    $('greeting').textContent = '';
+  }
 
   // Streak
   $('streak-number').textContent = calcStreak();
@@ -177,7 +188,7 @@ function renderHome() {
     anchorIcon.innerHTML = '&#x1f304;';
     anchorTitle.textContent = '有今日目标待查看';
     anchorSub.textContent = '你写下了今天的计划和Prompt，点击进入晨间锚定';
-    anchorBtn.style.display = 'block';
+    anchorBtn.style.display = 'inline-block';
     anchorBtn.textContent = '开始晨间锚定';
     anchorCard.onclick = () => startMorning();
     anchorBtn.onclick = (e) => { e.stopPropagation(); startMorning(); };
